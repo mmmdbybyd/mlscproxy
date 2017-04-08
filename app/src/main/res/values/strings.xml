@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">CProxy</string>
+    <string name="navigation_drawer_open">打开</string>
+    <string name="navigation_drawer_close">关闭</string>
+
+    <string name="title_activity_iptables">防跳编辑</string>
+    <string name="title_activity_settings">配置选项</string>
+    <string name="title_activity_pattern">模式编辑</string>
+    <string name="title_activity_update_core">核心更新</string>
+    <string name="title_activity_trans">模式转换</string>
+    <string name="title_activity_changelog">更新日志</string>
+
+
+    <string name="coredirectory">cproxy</string>
+    <string name="startipt">startipt.sh</string>
+    <string name="stopipt">stopipt.sh</string>
+    <string name="defaultconf">cproxy.conf</string>
+    <string name="database">cproxy.db</string>
+
+    <string name="sharedpref">android.lovefantasy.CProxy_preferences</string>
+    <string name="pf_firstrun">pf_firstrun</string>
+    <string name="pf_bootstart">pf_bootstart</string>
+    <string name="pf_showoutput">pf_showoutput</string>
+    <string name="pf_datastatistics">pf_datastatistics</string>
+    <string name="pf_notification">pf_notification</string>
+    <string name="pf_clearnotification">pf_clearnotification</string>
+    <string name="pf_fontcolor">pf_fontcolor</string>
+    <string name="pf_backgroundcolor">pf_backgroundcolor</string>
+    <string name="pf_currentrunningcproxy">pf_currentruncproxy</string>
+</resources>

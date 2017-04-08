@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_new"
+        android:icon="@drawable/ic_new"
+        android:title="新建"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_in"
+        android:icon="@drawable/ic_in"
+        android:title="导入"
+        app:showAsAction="always" />
+    <item android:id="@+id/menu_output"
+        android:icon="@drawable/ic_ipt"
+        android:title="输出"
+        app:showAsAction="never"/>
+    <item android:id="@+id/menu_ipt"
+        android:icon="@drawable/ic_ipt"
+        android:title="防跳"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_out"
+        android:icon="@drawable/ic_exit"
+        android:title="退出"
+        app:showAsAction="never" />
+
+</menu>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/coordview"
+    tools:context="android.lovefantasy.mlscproxy.UI.MainActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:elevation="0dp"
+        android:id="@+id/appbar_main"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:title="CProxy"
+            app:titleTextAppearance="@style/ToolborTextAppearance" />
+    </android.support.design.widget.AppBarLayout>
+    <!--android:layout_height="?attr/actionBarSize"
+    app:layout_scrollFlags="scroll|enterAlways"-->
+
+    <include layout="@layout/content_main" />
+
+    <com.github.jorgecastilloprz.FABProgressCircle
+        android:id="@+id/fab_processbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        app:arcColor="#4CAF50"
+        app:arcWidth="3dp"
+        app:reusable="true">
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="14dp"
+            android:visibility="invisible"
+            app:borderWidth="0dp"
+            app:srcCompat="@drawable/ic_start" />
+
+    </com.github.jorgecastilloprz.FABProgressCircle>
+
+</android.support.design.widget.CoordinatorLayout>

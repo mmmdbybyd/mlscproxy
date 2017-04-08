@@ -1,0 +1,22 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="android.lovefantasy.mlscproxy.UI.ErrorFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="没有发生错误..."
+            android:padding="2dp"
+            android:textColor="@color/Orange"
+            android:textIsSelectable="true"
+            android:id="@+id/tv_error"/>
+    </ScrollView>
+
+
+</FrameLayout>

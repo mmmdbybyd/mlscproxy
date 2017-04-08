@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <PreferenceCategory android:title="常规"
+        >
+        <CheckBoxPreference
+            android:key="@string/pf_bootstart"
+            android:summaryOff="已关闭"
+            android:summaryOn="已开启"
+            android:title="开机启动核心和防跳"
+            android:defaultValue="false"/>
+        <CheckBoxPreference
+            android:key="@string/pf_notification"
+            android:summaryOff="已关闭"
+            android:summaryOn="已开启"
+            android:title="通知栏显示核心状态"
+            android:defaultValue="false"/>
+
+        <CheckBoxPreference
+            android:key="@string/pf_clearnotification"
+            android:summaryOff="已关闭"
+            android:summaryOn="已开启"
+            android:title="退出程序清除通知栏"
+            android:defaultValue="false"/>
+
+    </PreferenceCategory>
+    <PreferenceCategory android:title="高级"
+        android:enabled="true">
+        <CheckBoxPreference
+            android:key="@string/pf_showoutput"
+            android:summaryOff="已关闭"
+            android:summaryOn="已开启"
+            android:title="启动关闭后显示输出"
+            android:defaultValue="true"/>
+        <CheckBoxPreference
+            android:key="@string/pf_datastatistics"
+            android:summaryOff="已关闭"
+            android:summaryOn="已开启"
+            android:title="后台流量统计服务"
+            android:defaultValue="false"/>
+
+        <EditTextPreference
+            android:dialogMessage="例如: #657b83"
+            android:dialogTitle="文字颜色:"
+            android:defaultValue="#657b83"
+            android:key="pf_fontcolor"
+            android:summary="文字颜色"
+            android:title="编辑器文字颜色" />
+        <EditTextPreference
+            android:dialogMessage="例如: #002b36"
+            android:dialogTitle="背景颜色:"
+            android:key="pf_backgroundcolor"
+            android:defaultValue="#002b36"
+            android:summary="背景颜色"
+            android:title="编辑器背景颜色" />
+        <!--EditTextPreference
+
+            android:dialogMessage="命令间用';'隔开!"
+            android:dialogTitle="输入命令:"
+            android:key="pf_edit"
+            android:summary="包括核心及防跳"
+            android:title="开启核心命令" />
+        <EditTextPreference
+            android:dialogMessage="命令间用';'隔开!"
+            android:dialogTitle="输入命令:"
+            android:key="pf_edit"
+            android:summary="查看核心后台"
+            android:title="检查核心命令" />
+        <EditTextPreference
+            android:dialogMessage="命令间用';'隔开!"
+            android:dialogTitle="输入命令:"
+            android:key="pf_edit"
+            android:summary="包括核心及防跳"
+            android:title="关闭核心命令" />
+        <EditTextPreference
+            android:dialogMessage="命令间用';'隔开!"
+            android:dialogTitle="输入命令:"
+            android:key="pf_edit"
+            android:summary="不开启核心"
+            android:title="开启防跳命令" />
+        <EditTextPreference
+            android:dialogMessage="命令间用';'隔开!"
+            android:dialogTitle="输入命令:"
+            android:key="pf_edit"
+            android:summary="不包括核心后台"
+            android:title="检查防跳命令" />
+        <EditTextPreference
+            android:dialogMessage="命令间用';'隔开!"
+            android:dialogTitle="输入命令:"
+            android:key="pf_edit"
+            android:summary="不关闭核心"
+            android:title="关闭防跳命令" /-->
+    </PreferenceCategory>
+</PreferenceScreen>

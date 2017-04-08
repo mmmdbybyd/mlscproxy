@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="android.lovefantasy.mlscproxy.UI.TransActivity"
+    tools:showIn="@layout/activity_trans">
+   <ScrollView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical">
+           <android.lovefantasy.mlscproxy.Wigets.EditTextEx
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:minLines="6"
+               android:id="@+id/et_transtiny"
+               android:textSize="12sp"
+               android:gravity="start"
+               />
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               >
+               <TextView
+                   android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:layout_height="wrap_content"
+                   android:maxLines="1"
+                   android:gravity="center"
+                   android:text="Tiny: ↑    CProxy: ↓"
+                   android:textStyle="bold"
+                   android:layout_gravity="start|center_vertical"
+                   />
+               <Button
+                   android:layout_width="wrap_content"
+                   android:layout_height="40dp"
+                   android:layout_margin="4dp"
+                   android:id="@+id/bt_transedittext"
+                   android:background="@drawable/normal_button"
+                   android:textColor="#ffffff"
+                   android:text="转换"/>
+               <Button
+                   android:layout_width="wrap_content"
+                   android:layout_height="40dp"
+                   android:id="@+id/bt_transsdcard"
+                   android:background="@drawable/normal_button"
+                    android:layout_margin="4dp"
+                   android:textColor="#ffffff"
+                   android:text="浏览"/>
+           </LinearLayout>
+           <android.lovefantasy.mlscproxy.Wigets.EditTextEx
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:minLines="6"
+               android:id="@+id/et_transcproxy"
+               android:textSize="12sp"
+               android:gravity="start"
+
+            />
+       </LinearLayout>
+   </ScrollView>
+
+
+
+</LinearLayout>

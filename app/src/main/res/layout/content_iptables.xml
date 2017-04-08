@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_iptables"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="android.lovefantasy.mlscproxy.UI.IptablesActivity"
+    tools:showIn="@layout/activity_iptables"
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:elevation="4dp"
+            android:layout_margin="4dp"
+            android:background="@drawable/normal_button"
+            android:textColor="#ffffff"
+            android:layout_height="40dp"
+            android:id="@+id/bt_startipt"
+            android:text="开启防跳"/>
+        <Button
+            android:elevation="4dp"
+            android:layout_margin="4dp"
+            android:background="@drawable/normal_button"
+            android:textColor="#ffffff"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:id="@+id/bt_uid"
+            android:text="UID"/>
+        <Button
+            android:elevation="4dp"
+            android:layout_margin="4dp"
+            android:background="@drawable/normal_button"
+            android:textColor="#ffffff"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:id="@+id/bt_stopipt"
+            android:text="关闭防跳"/>
+    </LinearLayout>
+        <android.lovefantasy.mlscproxy.Wigets.ScrollViewEx
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/iptables_scroll"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="防跳开启脚本(无需加启动核心代码)" />
+                <android.lovefantasy.mlscproxy.Wigets.EditTextEx
+                    android:id="@+id/et_iptstart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/Base03"
+                    android:fontFamily="monospace"
+                    android:gravity="start"
+                    android:inputType="textMultiLine"
+                    android:minLines="6"
+                    android:textColor="@color/Base00"
+                    android:textSize="12sp"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="防跳关闭脚本(无需加关闭核心代码)" />
+
+                <android.lovefantasy.mlscproxy.Wigets.EditTextEx
+                    android:id="@+id/et_iptstop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/Base03"
+                    android:fontFamily="monospace"
+                    android:gravity="start"
+                    android:inputType="textMultiLine"
+                    android:minLines="6"
+                    android:textColor="@color/Base00"
+                    android:textSize="12sp"
+                    />
+            </LinearLayout>
+
+        </android.lovefantasy.mlscproxy.Wigets.ScrollViewEx>
+
+</LinearLayout>
+

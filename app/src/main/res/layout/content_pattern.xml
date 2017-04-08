@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_pattern"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="android.lovefantasy.mlscproxy.UI.PatternActivity"
+    tools:showIn="@layout/activity_pattern"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    >
+        <android.lovefantasy.mlscproxy.Wigets.ScrollViewEx
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/scrollView"
+            android:background="@color/Base03"
+
+            >
+            <android.lovefantasy.mlscproxy.Wigets.EditTextEx
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:textSize="12sp"
+            android:gravity="start"
+            android:minLines="30"
+            android:imeOptions="actionDone"
+            android:inputType="textMultiLine"
+            android:textColor="@color/Base00"
+            android:id="@+id/et_pattern"
+            android:background="@color/Base03"
+            />
+
+        </android.lovefantasy.mlscproxy.Wigets.ScrollViewEx>
+
+
+    <!--android.lovefantasy.mlscproxy.Wigets.EdittextEx
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="monospace"
+        android:textSize="12sp"
+        android:gravity="start"
+        android:minLines="12"
+        android:imeOptions="actionDone"
+        android:inputType="textMultiLine"
+        android:textColor="@color/Base00"
+        android:id="@+id/et_pattern"
+        android:background="@color/Base03"
+        /-->
+
+</LinearLayout>

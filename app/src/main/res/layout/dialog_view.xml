@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:elevation="4dp"
+
+    android:background="@drawable/shape_dialog">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+
+        android:id="@+id/tv_dilogtitle"
+        android:textColor="#ffffff"
+        android:textSize="18sp"
+        android:background="@drawable/shape_textview"
+        />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fadeScrollbars="false"
+        android:scrollbars="horizontal|vertical">
+
+        <TextView
+            android:id="@+id/dialog_tv"
+            android:layout_margin="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollHorizontally="true"
+            android:textIsSelectable="true"
+            android:text="请稍等片刻..."
+            android:textSize="13sp"
+
+            />
+    </ScrollView>
+
+        <Button
+            android:elevation="4dp"
+
+            android:layout_width="match_parent"
+            android:text="确定"
+            android:textSize="18sp"
+            android:textColor="#ffffff"
+            android:background="@drawable/dialog_button"
+            android:id="@+id/bt_dialogpositive"
+            android:layout_height="40dp" />
+        <!--Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:id="@+id/bt_dialognavitive"
+            android:layout_height="wrap_content" /-->
+
+</LinearLayout>

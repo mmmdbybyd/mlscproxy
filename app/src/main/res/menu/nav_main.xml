@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item android:title="功能">
+        <menu>
+
+        <item
+            android:id="@+id/menu_particular"
+            android:icon="@drawable/ic_particular"
+            android:title="详细信息" />
+        <item
+            android:id="@+id/menu_iptedit"
+            android:icon="@drawable/ic_iptedit"
+            android:title="防跳编辑" />
+        <item
+            android:id="@+id/menu_updatecore"
+            android:icon="@drawable/ic_update"
+            android:title="核心更新" />
+        <item
+            android:id="@+id/menu_settings"
+            android:icon="@drawable/ic_config"
+            android:title="配置选项" />
+
+            </menu>
+    </item>
+
+    <item android:title="其他">
+        <menu>
+            <item
+                android:id="@+id/menu_trans"
+                android:icon="@drawable/ic_trans"
+                android:visible="true"
+                android:title="转换" />
+            <item
+                android:id="@+id/menu_about"
+                android:icon="@drawable/ic_about"
+                android:title="关于" />
+        </menu>
+    </item>
+
+</menu>
