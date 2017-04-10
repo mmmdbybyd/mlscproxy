@@ -22,6 +22,7 @@
     <string name="pf_bootstart">pf_bootstart</string>
     <string name="pf_showoutput">pf_showoutput</string>
     <string name="pf_datastatistics">pf_datastatistics</string>
+    <string name="pf_statsrate">pf_statsrate</string>
     <string name="pf_notification">pf_notification</string>
     <string name="pf_clearnotification">pf_clearnotification</string>
     <string name="pf_fontcolor">pf_fontcolor</string>

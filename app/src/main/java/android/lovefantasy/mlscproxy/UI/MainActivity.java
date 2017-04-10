@@ -104,7 +104,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     String out = null;
     Animation animation = null;
     CoordinatorLayout coordinatorLayout = null;
-    TextView tv_ltime = null;
 
     SharedPreferences s = null;
     boolean clearNotify = false;
@@ -112,7 +111,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     boolean isShowfab = true;
     boolean trafficstats = false;
     TrafficStatsAidl mService = null;
-    boolean b = true;
+    int rate=5;
     ServiceConnection connection = null;
     SQLiteDatabase writableDatabase = null;
     //ScrollViewEx mScrollView=null;
@@ -364,7 +363,23 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
         }, "initfab").start();
     }
+    private void initService(){
+        connection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                L.e(TAG, "onServiceConnected");
+                mService = TrafficStatsAidl.Stub.asInterface(service);
 
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                mService=null;
+                L.e(TAG, "onServiceConnected");
+
+            }
+        };
+    }
     private void initPreferences() {
         new Thread(new Runnable() {
             @Override
@@ -373,6 +388,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 showOutput = s.getBoolean(getString(R.string.pf_showoutput), false);
                 clearNotify = s.getBoolean(getString(R.string.pf_clearnotification), false);
                 trafficstats = s.getBoolean(getString(R.string.pf_datastatistics), false);
+                rate = s.getInt(getString(R.string.pf_statsrate), 5);
                 mHandler.sendEmptyMessage(1212);
             }
         }).start();
@@ -400,6 +416,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         initStatusBar((AppBarLayout) findViewById(R.id.appbar_main), view);
         initToolBar();
         initDatabase();
+        initService();
         initFiles();
         initPreferences();
         initViews();
@@ -439,6 +456,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onDestroy() {
         super.onDestroy();
         clearNotify();
+        unbindServices();
     }
 
     @Override
@@ -661,7 +679,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
-
+    private void bindServices(){
+        Intent intent = new Intent(MainActivity.this, TrafficStatsService.class);
+        bindService(intent, connection, Context.BIND_AUTO_CREATE);
+    }
+    private void unbindServices(){
+        unbindService(connection);
+    }
     private void showOutput() {
         if (!showOutput) return;
         if (out != null && err != null && (!out.equals("") | !err.equals(""))) {
@@ -874,17 +898,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         writableDatabase.execSQL("insert into pattern (name,time,tx,rx,ltx,lrx) values(?,?,?,?,?,?)", new String[]{item, DateHelper.getCurrentDateAndTime(), "0", "0", "0", "0"});
     }
 
-    private void task() {
-        try {
-            if (b) {
-                mService.setupTask(3);
+    private void task(boolean b) {
+        if (trafficstats&&mService!=null) {
+            try {
+                if (b) {
+                    mService.setupTask(rate);
 
-            } else {
-                mService.cancelTask();
+                } else {
+                    mService.cancelTask();
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
             }
-        } catch (RemoteException e) {
-            e.printStackTrace();
         }
+
     }
 
     @Override
@@ -894,32 +921,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 setNetState((List<String>) msg.obj);
                 break;
             case 1212:
-                if (mService == null || connection == null) {
-                    connection = new ServiceConnection() {
-                        @Override
-                        public void onServiceConnected(ComponentName name, IBinder service) {
-                            L.e(TAG, "onServiceConnected");
-                            mService = TrafficStatsAidl.Stub.asInterface(service);
-                            try {
-                                mService.setupTask(3);
-                            } catch (RemoteException e) {
-                                e.printStackTrace();
-                            }
-                            //task();
-
-                        }
-
-                        @Override
-                        public void onServiceDisconnected(ComponentName name) {
-                            L.e(TAG, "onServiceConnected");
-
-                        }
-                    };
-                    Intent intent = new Intent(MainActivity.this, TrafficStatsService.class);
-                    bindService(intent, connection, Context.BIND_AUTO_CREATE);
+                if (trafficstats) {
+                    if (mService == null) {
+                        bindServices();
+                    }
                 }
-
-
                 break;
             case MSG.ROOT:
                 if (msg.obj == null) {
@@ -945,6 +951,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         filterError(((List<String>) msg.obj).get(1));
                     }
                     showOutput();
+                    task(true);
                     initDatabaseLtxLrx();
                 }
                 break;
@@ -960,8 +967,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         filterError(((List<String>) msg.obj).get(1));
                     }
                     showOutput();
+                    task(false);
                     updateDatabaseTxRx();
-
                 }
                 break;
             case MSG.GET_PATTERNS:

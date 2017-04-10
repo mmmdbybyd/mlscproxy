@@ -57,7 +57,7 @@ public class SettingsActivity extends PreferenceActivity implements
     private void task(){
         try {
             if (b) {
-                mService.setupTask(3);
+               // mService.setupTask(3);
 
             }else{
                 mService.cancelTask();

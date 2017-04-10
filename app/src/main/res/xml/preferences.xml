@@ -38,16 +38,19 @@
             android:summaryOn="已开启"
             android:title="后台流量统计服务"
             android:defaultValue="false"/>
-
         <EditTextPreference
-            android:dialogMessage="例如: #657b83"
+            android:dialogTitle="统计频率"
+            android:defaultValue="5"
+            android:key="pf_statsrate"
+            android:summary="默认5秒"
+            android:title="统计频率" />
+        <EditTextPreference
             android:dialogTitle="文字颜色:"
             android:defaultValue="#657b83"
             android:key="pf_fontcolor"
             android:summary="文字颜色"
             android:title="编辑器文字颜色" />
         <EditTextPreference
-            android:dialogMessage="例如: #002b36"
             android:dialogTitle="背景颜色:"
             android:key="pf_backgroundcolor"
             android:defaultValue="#002b36"

@@ -76,13 +76,13 @@ public class Core {
     }
 
     public void tinytocproxy(Handler handler, CharSequence tinycontent) {
-       // L.e(TAG, (String) tinycontent);
+        // L.e(TAG, (String) tinycontent);
         String cproxycontent = Contents.cproxyconf;
         String tmp = null;
-        Pattern p1 = Pattern.compile("http_first\\s*=\\s*\"([\\s\\S]*?)\\s*\"(?=;)",Pattern.DOTALL);
-        Pattern p2 = Pattern.compile("https_first\\s*=\\s*\"([\\s\\S]*?)\\s*\"(?=;)",Pattern.DOTALL);
-        Pattern p12 = Pattern.compile("http_add\\s*=\\s*\"([\\s\\S]*?)\\s*\"(?=;)",Pattern.DOTALL);
-        Pattern p13 = Pattern.compile("https_add\\s*=\\s*\"([\\s\\S]*?)\\s*\"(?=;)",Pattern.DOTALL);
+        Pattern p1 = Pattern.compile("http_first\\s*=\\s*\"([\\s\\S]*?)\\s*\"(?=;)", Pattern.DOTALL);
+        Pattern p2 = Pattern.compile("https_first\\s*=\\s*\"([\\s\\S]*?)\\s*\"(?=;)", Pattern.DOTALL);
+        Pattern p12 = Pattern.compile("http_add\\s*=\\s*\"([\\s\\S]*?)\\s*\"(?=;)", Pattern.DOTALL);
+        Pattern p13 = Pattern.compile("https_add\\s*=\\s*\"([\\s\\S]*?)\\s*\"(?=;)", Pattern.DOTALL);
         Pattern p3 = Pattern.compile("dns_url\\s*=\\s*\"(\\d+\\.\\d+\\.\\d+\\.\\d+)\"\\s*(?=;)");
         Pattern p4 = Pattern.compile("uid\\s*=\\s*(\\d+)\\s*(?=;)");
         Pattern p5 = Pattern.compile("mode\\s*=\\s*(\\w+)\\s*(?=;)");
@@ -100,39 +100,39 @@ public class Core {
          * httpfirst
          */
         Matcher matcher = p1.matcher(tinycontent);
-        tmp="\"";
+        tmp = "\"";
         if (matcher.find()) {
-            tmp+=matcher.group(1);
+            tmp += matcher.group(1);
             /*tmp=tmp.replaceAll("method","M");
             tmp=tmp.replaceAll("uri","U");
             tmp=tmp.replaceAll("host","H");
             tmp=tmp.replaceAll("version","V");
             tmp=tmp.replaceAll("\n","");
             tmp = tmp.replaceAll("\r\n","");*/
-          //  tmp = tmp.replaceAll("\\\\", "\\\\\\\\");
+            //  tmp = tmp.replaceAll("\\\\", "\\\\\\\\");
         }
         matcher = p12.matcher(tinycontent);
         while (matcher.find()) {
-            tmp+=matcher.group(1);
+            tmp += matcher.group(1);
 
             //tmp = tmp.replaceAll("\\\\", "\\\\\\\\");
         }
-        tmp=tmp.replaceAll("method","M");
-        tmp=tmp.replaceAll("uri","U");
-        tmp=tmp.replaceAll("host","H");
-        tmp=tmp.replaceAll("version","V");
-        tmp=tmp.replaceAll("\n","");
-        tmp = tmp.replaceAll("\r\n","");
+        tmp = tmp.replaceAll("[method]", "[M]");
+        tmp = tmp.replaceAll("[uri]", "[U]");
+        tmp = tmp.replaceAll("[host]", "[H]");
+        tmp = tmp.replaceAll("[version]", "[V]");
+        tmp = tmp.replaceAll("\n", "");
+        tmp = tmp.replaceAll("\r\n", "");
         tmp = tmp.replaceAll("\\\\", "\\\\\\\\");
-        tmp+="\"";
+        tmp += "\"";
         cproxycontent = cproxycontent.replaceAll("httpsetfirst", tmp);
         /****
          * httpsfirst
          */
         matcher = p2.matcher(tinycontent);
-        tmp="\"";
+        tmp = "\"";
         if (matcher.find()) {
-            tmp+=matcher.group(1);
+            tmp += matcher.group(1);
            /* tmp=tmp.replaceAll("method","M");
             tmp=tmp.replaceAll("uri","U");
             tmp=tmp.replaceAll("host","H");
@@ -143,7 +143,7 @@ public class Core {
         }
         matcher = p13.matcher(tinycontent);
         while (matcher.find()) {
-            tmp+=matcher.group(1);
+            tmp += matcher.group(1);
             /*tmp=tmp.replaceAll("method","M");
             tmp=tmp.replaceAll("uri","U");
             tmp=tmp.replaceAll("host","H");
@@ -152,23 +152,23 @@ public class Core {
             tmp = tmp.replaceAll("\r\n","");*/
             //tmp = tmp.replaceAll("\\\\", "\\\\\\\\");
         }
-        tmp=tmp.replaceAll("method","M");
-        tmp=tmp.replaceAll("uri","U");
-        tmp=tmp.replaceAll("host","H");
-        tmp=tmp.replaceAll("version","V");
-        tmp=tmp.replaceAll("\n","");
-        tmp = tmp.replaceAll("\r\n","");
+        tmp = tmp.replaceAll("[method]", "[M]");
+        tmp = tmp.replaceAll("[uri]", "[U]");
+        tmp = tmp.replaceAll("[host]", "[H]");
+        tmp = tmp.replaceAll("[version]", "[V]");
+        tmp = tmp.replaceAll("\n", "");
+        tmp = tmp.replaceAll("\r\n", "");
         tmp = tmp.replaceAll("\\\\", "\\\\\\\\");
-        tmp+="\"";
+        tmp += "\"";
         cproxycontent = cproxycontent.replaceAll("httpssetfirst", tmp);
         /****
          * dns
          */
         matcher = p3.matcher(tinycontent);
         if (matcher.find()) {
-            tmp=matcher.group(1);
-        }else {
-            tmp="119.29.29.29";
+            tmp = matcher.group(1);
+        } else {
+            tmp = "119.29.29.29";
         }
         cproxycontent = cproxycontent.replaceAll("dnsaddr", tmp);
         /****
@@ -176,9 +176,9 @@ public class Core {
          */
         matcher = p4.matcher(tinycontent);
         if (matcher.find()) {
-            tmp=matcher.group(1);
-        }else {
-            tmp="3004";
+            tmp = matcher.group(1);
+        } else {
+            tmp = "3004";
         }
         cproxycontent = cproxycontent.replaceAll("globaluid", tmp);
         /****
@@ -193,28 +193,28 @@ public class Core {
                 tmp = "net_connect";
             } else if (tmp.equals("net_off")) {
                 tmp = "net_connect";
-            }else {
+            } else {
                 tmp = "wap";
             }
 
-        }else {
+        } else {
             tmp = "wap";
         }
         cproxycontent = cproxycontent.replaceAll("globalmode", tmp);
         /****
          * httpip
          */
-         matcher = p6.matcher(tinycontent);
+        matcher = p6.matcher(tinycontent);
         if (matcher.find()) {
             tmp = matcher.group(1);
-        }else {
+        } else {
             tmp = "10.0.0.172";
         }
         matcher = p7.matcher(tinycontent);
         if (matcher.find()) {
             tmp += ":" + matcher.group(1);
 
-        }else {
+        } else {
             tmp += ":80";
         }
         cproxycontent = cproxycontent.replaceAll("httpaddr", tmp);
@@ -224,13 +224,13 @@ public class Core {
         matcher = p8.matcher(tinycontent);
         if (matcher.find()) {
             tmp = matcher.group(1);
-        }else {
+        } else {
             tmp = "10.0.0.172";
         }
         matcher = p9.matcher(tinycontent);
         if (matcher.find()) {
             tmp += ":" + matcher.group(1);
-        }else {
+        } else {
             tmp += ":80";
         }
         cproxycontent = cproxycontent.replaceAll("httpsaddr", tmp);
@@ -239,15 +239,15 @@ public class Core {
          */
         matcher = p10.matcher(tinycontent);
         if (matcher.find()) {
-            tmp=matcher.group(1);
+            tmp = matcher.group(1);
             String[] split = tmp.split(",");
-            tmp="";
-            for (int i=0;i<split.length;i++) {
-                tmp += "    del_hdr = " + split[i]+";\n";
+            tmp = "";
+            for (int i = 0; i < split.length; i++) {
+                tmp += "    del_hdr = " + split[i] + ";\n";
             }
 
-        }else {
-            tmp="    del_hdr = Host;\n    del_hdr = X-Online-Host;\n";
+        } else {
+            tmp = "    del_hdr = Host;\n    del_hdr = X-Online-Host;\n";
         }
         cproxycontent = cproxycontent.replaceAll("httpdelhdr", tmp);
         /****
@@ -255,15 +255,15 @@ public class Core {
          */
         matcher = p11.matcher(tinycontent);
         if (matcher.find()) {
-            tmp=matcher.group(1);
+            tmp = matcher.group(1);
             String[] split = tmp.split(",");
-            tmp="";
-            for (int i=0;i<split.length;i++) {
-                tmp += "    del_hdr = " + split[i]+";\n";
+            tmp = "";
+            for (int i = 0; i < split.length; i++) {
+                tmp += "    del_hdr = " + split[i] + ";\n";
             }
 
-        }else {
-            tmp="    del_hdr = Host;\n    del_hdr = X-Online-Host;\n";
+        } else {
+            tmp = "    del_hdr = Host;\n    del_hdr = X-Online-Host;\n";
         }
         cproxycontent = cproxycontent.replaceAll("httpsdelhdr", tmp);
 
@@ -319,16 +319,18 @@ public class Core {
         // bt = (Button) view.findViewById(R.id.bt_dialogpositive);
         dialog = new Dialog(context, R.style.DialogTheme);
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.height=dp2px(mContext,300);
+        layoutParams.height = dp2px(mContext, 300);
         dialog.addContentView(view, layoutParams);
         //  dialog.getWindow().setWindowAnimations(R.style.DialogAnim);
         // dialog.show();
         return dialog;
     }
+
     public static int dp2px(Context context, float dpValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
+
     synchronized public void getConfs(final int score, final Handler handler) {
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -341,7 +343,7 @@ public class Core {
                 for (int i = 0; i < files.length; i++) {
                     //LogUtils.e("getPatternConfs",files[i]);
                     if (files[i].endsWith(".conf")) {
-                        confs.add(new ItemData(files[i].substring(0,files[i].lastIndexOf("."))));
+                        confs.add(new ItemData(files[i].substring(0, files[i].lastIndexOf("."))));
                     }
                 }
                 message.obj = confs;
@@ -392,15 +394,16 @@ public class Core {
         return spannableString;
     }
 
-    public int getrealline(CharSequence charSequence){
-        int tmp=0;
-        Pattern p=Pattern.compile("\n",Pattern.MULTILINE|Pattern.DOTALL);
-        Matcher m=p.matcher(charSequence);
+    public int getrealline(CharSequence charSequence) {
+        int tmp = 0;
+        Pattern p = Pattern.compile("\n", Pattern.MULTILINE | Pattern.DOTALL);
+        Matcher m = p.matcher(charSequence);
         while (m.find()) {
-            tmp+=1;
+            tmp += 1;
         }
         return tmp;
     }
+
     public String readStream(InputStream in) {
         char data[] = new char[512];
         int len;
@@ -528,13 +531,13 @@ public class Core {
                     output.add(strpid);
                     Message msg = handler.obtainMessage(MSG.CPROXYEXEC);
                     msg.obj = output;
-                    msg.arg1=1;
+                    msg.arg1 = 1;
                     handler.sendMessage(msg);
                 } else {
                     output.add("NULL");
                     Message msg = handler.obtainMessage(MSG.CPROXYKILL);
                     msg.obj = output;
-                    msg.arg1=1;
+                    msg.arg1 = 1;
                     handler.sendMessage(msg);
                 }
             }
@@ -557,13 +560,13 @@ public class Core {
                 output.add(strpid);
                 Message msg = handler.obtainMessage(MSG.CPROXYEXEC);
                 msg.obj = output;
-                msg.arg1=1;
+                msg.arg1 = 1;
                 handler.sendMessage(msg);
             } else {
                 output.add("NULL");
                 Message msg = handler.obtainMessage(MSG.CPROXYKILL);
                 msg.obj = output;
-                msg.arg1=1;
+                msg.arg1 = 1;
                 handler.sendMessage(msg);
             }
         }
@@ -579,20 +582,20 @@ public class Core {
                     "./CProxy stop",
                     "sh " + stopipt);
         }
-        sharedPreferences.edit().putString(mContext.getString(R.string.pf_currentrunningcproxy),"null").apply();
+        sharedPreferences.edit().putString(mContext.getString(R.string.pf_currentrunningcproxy), "null").apply();
         if (handler != null) {
             String strpid = isCoreRunning(1);
             if (strpid != null) {
                 output.add(strpid);
                 Message msg = handler.obtainMessage(MSG.CPROXYEXEC);
                 msg.obj = output;
-                msg.arg1=1;
+                msg.arg1 = 1;
                 handler.sendMessage(msg);
             } else {
                 output.add("NULL");
                 Message msg = handler.obtainMessage(MSG.CPROXYKILL);
                 msg.obj = output;
-                msg.arg1=1;
+                msg.arg1 = 1;
                 handler.sendMessage(msg);
             }
         }
@@ -802,8 +805,8 @@ public class Core {
         builder = new Notification.Builder(mContext);
         Intent resuIntent = new Intent(Intent.ACTION_MAIN);
         resuIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-        resuIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT|Intent.FLAG_ACTIVITY_NEW_TASK);
-        resuIntent.setComponent(new ComponentName(mContext,MainActivity.class));
+        resuIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
+        resuIntent.setComponent(new ComponentName(mContext, MainActivity.class));
         builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setContentIntent(PendingIntent.getActivity(mContext, 0, resuIntent, PendingIntent.FLAG_UPDATE_CURRENT));
         builder.setContentTitle(title);

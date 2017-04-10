@@ -7,8 +7,8 @@ package android.lovefantasy.mlscproxy.Base;
 public class Contents {
     static public String ipts[] = {"#!/system/bin/sh\n" +
             "#VPN选项，尽量开启VPN后重启防跳，部分机型不支持\n" +
-            "card='' #数据网卡，该项留空则不处理\n" +
-            "proxy_mode='share'  #如果为share则代理共享数据，否则只代理本机\n" +
+            "card='ccmni0' #数据网卡，该项留空则不处理\n" +
+            "proxy_mode='off'  #如果为share则代理共享数据，否则只代理本机\n" +
             "\n" +
             "#放行udp（不包括DNS）\n" +
             "selfudp=''  #填uid，多个空格隔开\n" +
@@ -57,14 +57,6 @@ public class Contents {
             "        iptables -FFORWARD\n" +
             "    fi\n" +
             "fi\n" +
-            "#udp转发\n" +
-            "udp_listen_list=(`echo \"${mode_content##*httpudp}\" | grep listen[1-9] | grep -o \\ [1-9][^\\;]\\*`)\n" +
-            "udp_dst_list=(`echo \"${mode_content##*httpudp}\" | grep dest[1-9] | grep -o \\ [1-9][^\\;]\\*`)\n" +
-            "while [ -n \"${udp_listen_list[${i:=0}]}\" ]\n" +
-            "do\n" +
-            "    iptables -tnat -AOUTPUT -d${udp_dst_list[$i]%:*} -pudp --dport ${udp_dst_list[$i]#*:} -jREDIRECT --to ${udp_listen_list[$i]}\n" +
-            "     ((i++))\n" +
-            "done\n" +
             "#udp放行\n" +
             "for UID in $selfudp\n" +
             "do\n" +
@@ -90,7 +82,8 @@ public class Contents {
             "iptables -tmangle -SOUTPUT\n" +
             "echo ❁ nat表 OUTPUT链:\n" +
             "iptables -tnat -SOUTPUT\n" +
-            "[ -n \"$card\" ] && echo \"❁ nat表 POSTROUTING链:\\n`iptables -tnat -SPOSTROUTING`\\n路由规则:\\n`ip rule ls`\"\n",
+            "[ -n \"$card\" ] && echo \"❁ nat表 POSTROUTING链:\\n`iptables -tnat -SPOSTROUTING`\\n路由规则:\\n`ip rule ls`\"\n" +
+            "\n",
 
             "#!/system/bin/sh\n" +
                     "iptables -tmangle -PINPUT ACCEPT\n" +
