@@ -5,12 +5,12 @@
             <gradient android:type="radial"
                 android:startColor="@color/colorPrimaryDark"
                 android:endColor="@color/colorPrimaryLight"
-                android:gradientRadius="150dp"
+                android:gradientRadius="200dp"
                 android:centerX="0.5"
                 android:centerY="0.5"
                 />
-            <size android:height="150dp"
-                android:width="150dp"/>
+            <size android:height="200dp"
+                android:width="200dp"/>
         </shape>
     </item>
     <item android:state_pressed="false">
@@ -19,12 +19,12 @@
             <gradient android:type="radial"
                 android:startColor="@color/colorPrimary"
                 android:endColor="@color/colorPrimaryLight"
-                android:gradientRadius="150dp"
+                android:gradientRadius="200dp"
                 android:centerX="0.5"
                 android:centerY="0.5"
                 />
-            <size android:height="150dp"
-                android:width="150dp"/>
+            <size android:height="200dp"
+                android:width="200dp"/>
         </shape>
 
     </item>
