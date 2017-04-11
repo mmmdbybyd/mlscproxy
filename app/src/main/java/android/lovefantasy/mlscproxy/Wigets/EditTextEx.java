@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.lovefantasy.mlscproxy.Base.App;
 import android.lovefantasy.mlscproxy.R;
+import android.lovefantasy.mlscproxy.Tools.L;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.Layout;
@@ -20,7 +21,7 @@ public class EditTextEx extends EditText {
     // private int drawedCount = 0;
     private int lineCount = 0;
     private int lineHeight = 0;
-    private int realLineCount = 1;
+    private int realLineCount = 0;
     //private int realLineCount =1;
     private Paint mPaint = null;
     private int real = 0;
@@ -93,7 +94,7 @@ public class EditTextEx extends EditText {
     protected void onDraw(Canvas canvas) {
         Editable text = getText();
         if (text.length() > 0) {
-            mPaint.setTextSize(getTextSize());
+            //mPaint.setTextSize(getTextSize()-4);
             lineCount = getLineCount();
             layout = getLayout();
             resetRealLineCount();
@@ -102,7 +103,7 @@ public class EditTextEx extends EditText {
                 lineHeight = layout.getLineBaseline(drawedCount);
                 lineEnd = layout.getLineEnd(drawedCount);
                 if (wrapedLine) {
-                    canvas.drawText(String.valueOf(realLineCount++), 0, lineHeight, mPaint);
+                    canvas.drawText(String.valueOf(++realLineCount), 0, lineHeight, mPaint);
                 }
                 if (text.charAt(lineEnd - 1) != '\n') {
                     wrapedLine = false;
@@ -111,6 +112,7 @@ public class EditTextEx extends EditText {
                 }
             }
             padding = (int) mPaint.measureText(String.valueOf(realLineCount));
+            L.e(TAG,String.valueOf(realLineCount) +":"+String.valueOf(mPaint.measureText(String.valueOf(realLineCount))));
             real = realLineCount;
             canvas.drawLine(padding + 15, 0, padding + 15, lineHeight, mPaint);
         }
@@ -123,7 +125,7 @@ public class EditTextEx extends EditText {
     }
 
     private void resetRealLineCount() {
-        realLineCount = 1;
+        realLineCount = 0;
     }
 
     public int getRealLineCount() {

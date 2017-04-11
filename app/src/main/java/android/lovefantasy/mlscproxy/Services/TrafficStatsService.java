@@ -33,7 +33,7 @@ public class TrafficStatsService extends Service {
         @Override
         public void setupTask(int interval) throws RemoteException {
             L.e(TAG,"setupTask");
-            if (mTimer!=null)return;
+            if (mTimer!=null)mTimer.cancel();
             mDatabaseHelper= new DatabaseHelper(App.getContext(), getString(R.string.database), null, 3);
             mDatabase = mDatabaseHelper.getWritableDatabase();
             s = getSharedPreferences(getString(R.string.sharedpref), MODE_PRIVATE);

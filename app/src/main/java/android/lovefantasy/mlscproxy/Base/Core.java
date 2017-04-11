@@ -61,7 +61,8 @@ public class Core {
     public String startipt;
     public String stopipt;
     private String defaultconf;
-    private Pattern p;
+    private Pattern p=null;
+    private Pattern p1=null;
     private static String TAG = Core.class.getSimpleName();
 
     public Core(Context context) {
@@ -72,7 +73,6 @@ public class Core {
         startipt = filedir + mContext.getString(R.string.coredirectory) + split + mContext.getString(R.string.startipt);
         stopipt = filedir + mContext.getString(R.string.coredirectory) + split + mContext.getString(R.string.stopipt);
         defaultconf = filedir + mContext.getString(R.string.coredirectory) + split + mContext.getString(R.string.defaultconf);
-        p = Pattern.compile("\\s+(\\d+)\\s+1\\s+");
     }
 
     public void tinytocproxy(Handler handler, CharSequence tinycontent) {
@@ -117,10 +117,10 @@ public class Core {
 
             //tmp = tmp.replaceAll("\\\\", "\\\\\\\\");
         }
-        tmp = tmp.replaceAll("[method]", "[M]");
-        tmp = tmp.replaceAll("[uri]", "[U]");
-        tmp = tmp.replaceAll("[host]", "[H]");
-        tmp = tmp.replaceAll("[version]", "[V]");
+        tmp = tmp.replaceAll("\\[method\\]", "[M]");
+        tmp = tmp.replaceAll("\\[uri\\]", "[U]");
+        tmp = tmp.replaceAll("\\[host\\]", "[H]");
+        tmp = tmp.replaceAll("\\[version\\]", "[V]");
         tmp = tmp.replaceAll("\n", "");
         tmp = tmp.replaceAll("\r\n", "");
         tmp = tmp.replaceAll("\\\\", "\\\\\\\\");
@@ -152,10 +152,10 @@ public class Core {
             tmp = tmp.replaceAll("\r\n","");*/
             //tmp = tmp.replaceAll("\\\\", "\\\\\\\\");
         }
-        tmp = tmp.replaceAll("[method]", "[M]");
-        tmp = tmp.replaceAll("[uri]", "[U]");
-        tmp = tmp.replaceAll("[host]", "[H]");
-        tmp = tmp.replaceAll("[version]", "[V]");
+        tmp = tmp.replaceAll("\\[method\\]", "[M]");
+        tmp = tmp.replaceAll("\\[uri\\]", "[U]");
+        tmp = tmp.replaceAll("\\[host\\]", "[H]");
+        tmp = tmp.replaceAll("\\[version\\]", "[V]");
         tmp = tmp.replaceAll("\n", "");
         tmp = tmp.replaceAll("\r\n", "");
         tmp = tmp.replaceAll("\\\\", "\\\\\\\\");
@@ -396,11 +396,16 @@ public class Core {
 
     public int getrealline(CharSequence charSequence) {
         int tmp = 0;
-        Pattern p = Pattern.compile("\n", Pattern.MULTILINE | Pattern.DOTALL);
-        Matcher m = p.matcher(charSequence);
+        if (p1 == null) {
+            p1 = Pattern.compile("\n", Pattern.MULTILINE | Pattern.DOTALL);
+
+           // p1=Pattern.compile("^[\\s\\S]|^\n",Pattern.MULTILINE|Pattern.DOTALL);
+        }
+        Matcher m = p1.matcher(charSequence);
         while (m.find()) {
             tmp += 1;
         }
+      //  L.e(TAG,String.valueOf(tmp));
         return tmp;
     }
 
@@ -819,6 +824,9 @@ public class Core {
 
     public String isCoreRunning(final int core) {
         String strpid = null;
+        if (p == null) {
+            p = Pattern.compile("\\s+(\\d+)\\s+1\\s+");
+        }
         Matcher m = p.matcher(execmds(true, false, "ps|grep CProxy").get(0));
         while (m.find()) {
             strpid = m.group(1);

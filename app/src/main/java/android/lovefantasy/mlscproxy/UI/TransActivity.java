@@ -36,6 +36,9 @@ public class TransActivity extends BaseActivity implements Handler.Callback{
     CharSequence tmp=null;
     Core coreHelper = App.getCoreHelper();
     private ProgressDialog pd=null;
+    
+    int tinyline=1;
+    int cproxyline=1;
     static private String TAG = TransActivity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,41 +65,60 @@ public class TransActivity extends BaseActivity implements Handler.Callback{
         et_cproxy = (EditText) findViewById(R.id.et_transcproxy);
         bt_transsdcard = (Button) findViewById(R.id.bt_transsdcard);
         bt_transedittext= (Button) findViewById(R.id.bt_transedittext);
+        paint.setTextSize(et_tiny.getTextSize()-4);
+        paint.setDither(true);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setAntiAlias(true);
+
+        paint.setLinearText(true);
+        paint.setSubpixelText(true);
     }
     private void initListeners(){
         et_tiny.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                if (after == 0) {
+                    tinyline -= coreHelper.getrealline(s.subSequence(start, start + count));
+                }
+                //   LogUtils.e(TAG+1,"1: "+s.subSequence(start,start+count));
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                paint.setTextSize(et_tiny.getTextSize());
-                et_tiny.setPadding((int) paint.measureText(String.valueOf(et_tiny.getLineCount())) + 30, 0, 0, 0);
-
+                //输入 count>0 删除before>0
+                if (before == 0) {
+                    tinyline += coreHelper.getrealline(s.subSequence(start, start + count));
+                }
+                //    LogUtils.e(TAG+2,"1: "+s.subSequence(start,start+count));
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                et_tiny.setPadding((int) paint.measureText(String.valueOf(tinyline)) + 20, 0, 0, 0);
+                // L.e(TAG,String.valueOf(tinyline));
             }
         });
         et_cproxy.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                if (after == 0) {
+                    cproxyline -= coreHelper.getrealline(s.subSequence(start, start + count));
+                }
+                //   LogUtils.e(TAG+1,"1: "+s.subSequence(start,start+count));
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                paint.setTextSize(et_cproxy.getTextSize());
-                et_cproxy.setPadding((int) paint.measureText(String.valueOf(et_cproxy.getLineCount())) + 30, 0, 0, 0);
-
+                //输入 count>0 删除before>0
+                if (before == 0) {
+                    cproxyline += coreHelper.getrealline(s.subSequence(start, start + count));
+                }
+                //    LogUtils.e(TAG+2,"1: "+s.subSequence(start,start+count));
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                et_cproxy.setPadding((int) paint.measureText(String.valueOf(cproxyline)) + 20, 0, 0, 0);
 
             }
         });

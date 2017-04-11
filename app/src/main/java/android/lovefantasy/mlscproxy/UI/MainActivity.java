@@ -388,7 +388,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 showOutput = s.getBoolean(getString(R.string.pf_showoutput), false);
                 clearNotify = s.getBoolean(getString(R.string.pf_clearnotification), false);
                 trafficstats = s.getBoolean(getString(R.string.pf_datastatistics), false);
-                rate = s.getInt(getString(R.string.pf_statsrate), 5);
+                rate = Integer.parseInt( s.getString(getString(R.string.pf_statsrate),"5"));
                 mHandler.sendEmptyMessage(1212);
             }
         }).start();
@@ -684,7 +684,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
     }
     private void unbindServices(){
-        unbindService(connection);
+        if (trafficstats&&mService!=null) {
+            unbindService(connection);
+            mService=null;
+        }
     }
     private void showOutput() {
         if (!showOutput) return;
@@ -709,61 +712,88 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
-    private void writeDatabase(List<ItemData> datas) {
-        for (int i = 0; i < datas.size(); i++) {
-            Cursor cursor = writableDatabase.rawQuery("select * from pattern where name=?", new String[]{datas.get(i).getData() + ".conf"});
-            if (!cursor.moveToFirst()) {
+    private void writeDatabase(final List<ItemData> datas) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < datas.size(); i++) {
+                    Cursor cursor = writableDatabase.rawQuery("select * from pattern where name=?", new String[]{datas.get(i).getData() + ".conf"});
+                    if (!cursor.moveToFirst()) {
 
-                writableDatabase.execSQL("insert into pattern (name,time,tx,rx,ltx,lrx) values(?,?,?,?,?,?)", new String[]{datas.get(i).getData() + ".conf", DateHelper.getCurrentDateAndTime(), "0", "0", "0", "0"});
+                        writableDatabase.execSQL("insert into pattern (name,time,tx,rx,ltx,lrx) values(?,?,?,?,?,?)", new String[]{datas.get(i).getData() + ".conf", DateHelper.getCurrentDateAndTime(), "0", "0", "0", "0"});
 
+                    }
+                }
             }
-        }
+        }).start();
+
 
     }
 
     private void updateDatabaseTxRx() {
-        double tx = 0, rx = 0, ltx = 0, lrx = 0, tmptx = 0, tmprx = 0;
-        String current = s.getString(getString(R.string.pf_currentrunningcproxy), "null");
-        if (current.equals("null")) {
-            return;
-        }
-        Cursor cursor = writableDatabase.rawQuery("select * from pattern where name=?", new String[]{current});
-        if (cursor.moveToFirst()) {
-            tx = cursor.getDouble(cursor.getColumnIndex("tx"));
-            rx = cursor.getDouble(cursor.getColumnIndex("rx"));
-            ltx = cursor.getDouble(cursor.getColumnIndex("ltx"));
-            lrx = cursor.getDouble(cursor.getColumnIndex("lrx"));
-            tmptx = TrafficStats.getTotalTxBytes() / (DIV);
-            tmprx = TrafficStats.getTotalRxBytes() / (DIV);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                double tx = 0, rx = 0, ltx = 0, lrx = 0, tmptx = 0, tmprx = 0;
+                String current = s.getString(getString(R.string.pf_currentrunningcproxy), "null");
+                if (current.equals("null")) {
+                    return;
+                }
+                Cursor cursor = writableDatabase.rawQuery("select * from pattern where name=?", new String[]{current});
+                if (cursor.moveToFirst()) {
+                    tx = cursor.getDouble(cursor.getColumnIndex("tx"));
+                    rx = cursor.getDouble(cursor.getColumnIndex("rx"));
+                    ltx = cursor.getDouble(cursor.getColumnIndex("ltx"));
+                    lrx = cursor.getDouble(cursor.getColumnIndex("lrx"));
+                    tmptx = TrafficStats.getTotalTxBytes() / (DIV);
+                    tmprx = TrafficStats.getTotalRxBytes() / (DIV);
 
-            tx += tmptx - ltx;
-            rx += tmprx - lrx;
-            writableDatabase.execSQL("update pattern set tx=? where name=?", new String[]{String.valueOf(tx), current});
-            writableDatabase.execSQL("update pattern set rx=? where name=?", new String[]{String.valueOf(rx), current});
-            writableDatabase.execSQL("update pattern set ltx=? where name=?", new String[]{String.valueOf(tmptx), current});
-            writableDatabase.execSQL("update pattern set lrx=? where name=?", new String[]{String.valueOf(tmprx), current});
-        }
+                    tx += tmptx - ltx;
+                    rx += tmprx - lrx;
+                    writableDatabase.execSQL("update pattern set tx=? where name=?", new String[]{String.valueOf(tx), current});
+                    writableDatabase.execSQL("update pattern set rx=? where name=?", new String[]{String.valueOf(rx), current});
+                    writableDatabase.execSQL("update pattern set ltx=? where name=?", new String[]{String.valueOf(tmptx), current});
+                    writableDatabase.execSQL("update pattern set lrx=? where name=?", new String[]{String.valueOf(tmprx), current});
+                }
+            }
+        }).start();
+
 
     }
 
     private void initDatabaseLtxLrx() {
-        double tx = 0, rx = 0, ltx = 0, lrx = 0, tmptx = 0, tmprx = 0;
-        String current = s.getString(getString(R.string.pf_currentrunningcproxy), "cproxy.conf");
-        Cursor cursor = writableDatabase.rawQuery("select * from pattern where name=?", new String[]{current});
-        if (cursor.moveToFirst()) {
-            tmptx = TrafficStats.getTotalTxBytes() / (DIV);
-            tmprx = TrafficStats.getTotalRxBytes() / (DIV);
-            writableDatabase.execSQL("update pattern set ltx=? where name=?", new String[]{String.valueOf(tmptx), current});
-            writableDatabase.execSQL("update pattern set lrx=? where name=?", new String[]{String.valueOf(tmprx), current});
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                double tx = 0, rx = 0, ltx = 0, lrx = 0, tmptx = 0, tmprx = 0;
+                String current = s.getString(getString(R.string.pf_currentrunningcproxy), "null");
+                if (current.equals("null")) {
+                    return;
+                }
+                Cursor cursor = writableDatabase.rawQuery("select * from pattern where name=?", new String[]{current});
+                if (cursor.moveToFirst()) {
+                    tmptx = TrafficStats.getTotalTxBytes() / (DIV);
+                    tmprx = TrafficStats.getTotalRxBytes() / (DIV);
+                    writableDatabase.execSQL("update pattern set ltx=? where name=?", new String[]{String.valueOf(tmptx), current});
+                    writableDatabase.execSQL("update pattern set lrx=? where name=?", new String[]{String.valueOf(tmprx), current});
+                }
+            }
+        }).start();
+
 
 
     }
 
     private void updateDatabaseTime() {
-        if (mPosition != -1) {
-            writableDatabase.execSQL("update pattern set time=? where name=?", new String[]{DateHelper.getCurrentDateAndTime(), s.getString(getString(R.string.pf_currentrunningcproxy), "cproxy.conf")});
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (mPosition != -1) {
+                    writableDatabase.execSQL("update pattern set time=? where name=?", new String[]{DateHelper.getCurrentDateAndTime(), s.getString(getString(R.string.pf_currentrunningcproxy), "cproxy.conf")});
+                }
+            }
+        }).start();
+
     }
 
 
@@ -940,10 +970,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
             case MSG.CPROXYEXEC:
                 updateDatabaseTime();
+                initDatabaseLtxLrx();
                 setFab(true);
                 if (msg.arg1 == 0) {
                     coreHelper.notifystatus(1, true, (String) msg.obj);
-                    updateDatabaseTxRx();
+                   // updateDatabaseTxRx();
                 } else if (msg.arg1 == 1) {
                     if (((List<String>) msg.obj).size() == 3) {
                         coreHelper.notifystatus(1, true, ((List<String>) msg.obj).get(2));
@@ -952,11 +983,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     }
                     showOutput();
                     task(true);
-                    initDatabaseLtxLrx();
+
                 }
                 break;
             case MSG.CPROXYKILL:
-                updateDatabaseTime();
                 setFab(false);
                 if (msg.arg1 == 0) {
                     coreHelper.notifystatus(1, false, null);
@@ -968,7 +998,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     }
                     showOutput();
                     task(false);
-                    updateDatabaseTxRx();
+
                 }
                 break;
             case MSG.GET_PATTERNS:

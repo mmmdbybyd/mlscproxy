@@ -295,7 +295,7 @@ public class CoreUpdateActivity extends BaseActivity implements Handler.Callback
                 return true;
             }
             version = (float) msg.obj;
-            float v = getSharedPreferences(getString(R.string.sharedpref), MODE_PRIVATE).getFloat("version", (float) 1.0);
+            float v = getSharedPreferences(getString(R.string.sharedpref), MODE_PRIVATE).getFloat("version", (float) 1.2);
             textView.setText("服务器版本: " + String.valueOf(version) + "    " + "本地版本: " + String.valueOf(v));
             if (v >= version) {
                 bt_checkupdate.setText("没有更新");

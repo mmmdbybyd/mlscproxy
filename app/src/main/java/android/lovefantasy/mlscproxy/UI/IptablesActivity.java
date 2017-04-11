@@ -27,7 +27,9 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -58,6 +60,9 @@ public class IptablesActivity extends BaseActivity implements Handler.Callback {
     String backgroundcolor = null;
     ScrollViewEx mScrollView = null;
 
+
+    int startlinecount=1;
+    int stoplinecount=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +96,13 @@ public class IptablesActivity extends BaseActivity implements Handler.Callback {
         bt_startipt = (Button) findViewById(R.id.bt_startipt);
         bt_stopipt = (Button) findViewById(R.id.bt_stopipt);
         bt_uid = (Button) findViewById(R.id.bt_uid);
+        paint.setTextSize(et_iptstart.getTextSize()-4);
+        paint.setDither(true);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setAntiAlias(true);
+
+        paint.setLinearText(true);
+        paint.setSubpixelText(true);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,46 +125,54 @@ public class IptablesActivity extends BaseActivity implements Handler.Callback {
     }
 
     private void initListeners() {
-
-       /* et_iptstart.addTextChangedListener(new TextWatcher() {
+        et_iptstart.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                if (after == 0) {
+                    startlinecount -= coreHelper.getrealline(s.subSequence(start, start + count));
+                }
+                //   LogUtils.e(TAG+1,"1: "+s.subSequence(start,start+count));
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                //输入 count>0 删除before>0
+                if (before == 0) {
+                    startlinecount += coreHelper.getrealline(s.subSequence(start, start + count));
+                }
+                //    LogUtils.e(TAG+2,"1: "+s.subSequence(start,start+count));
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                paint.setTextSize(et_iptstart.getTextSize());
-                L.e(TAG,String.valueOf(et_iptstart.getRealLineCount()));
-                L.e(TAG, String.valueOf( (int) paint.measureText(String.valueOf(et_iptstart.getRealLineCount()))));
-               et_iptstart.setPadding((int) paint.measureText(String.valueOf(et_iptstart.getRealLineCount())) + 20, 0, 0, 0);
+                et_iptstart.setPadding((int) paint.measureText(String.valueOf(startlinecount)) + 20, 0, 0, 0);
+               // L.e(TAG,String.valueOf(startlinecount));
             }
         });
         et_iptstop.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                if (after == 0) {
+                    stoplinecount -= coreHelper.getrealline(s.subSequence(start, start + count));
+                }
+                //   LogUtils.e(TAG+1,"1: "+s.subSequence(start,start+count));
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                paint.setTextSize(et_iptstop.getTextSize());
-                L.e(TAG,String.valueOf(et_iptstop.getRealLineCount()));
-                L.e(TAG, String.valueOf( (int) paint.measureText(String.valueOf(et_iptstop.getRealLineCount()))));
-                et_iptstop.setPadding((int) paint.measureText(String.valueOf(et_iptstop.getRealLineCount())) + 20, 0, 0, 0);
-
+                //输入 count>0 删除before>0
+                if (before == 0) {
+                    stoplinecount += coreHelper.getrealline(s.subSequence(start, start + count));
+                }
+                //    LogUtils.e(TAG+2,"1: "+s.subSequence(start,start+count));
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                et_iptstop.setPadding((int) paint.measureText(String.valueOf(stoplinecount)) + 20, 0, 0, 0);
 
             }
-        });*/
+        });
         bt_startipt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -271,7 +291,7 @@ public class IptablesActivity extends BaseActivity implements Handler.Callback {
                             mHandler.sendMessage(msg);
                         }
                     }).start();
-                    new Thread(new Runnable() {
+                   /* new Thread(new Runnable() {
                         @Override
                         public void run() {
 
@@ -279,7 +299,7 @@ public class IptablesActivity extends BaseActivity implements Handler.Callback {
                             message.obj = coreHelper.getrealline(mCharSequence1);
                             mHandler.sendMessage(message);
                         }
-                    }).start();
+                    }).start();*/
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -289,7 +309,7 @@ public class IptablesActivity extends BaseActivity implements Handler.Callback {
                             mHandler.sendMessage(msg);
                         }
                     }).start();
-                    new Thread(new Runnable() {
+                  /*  new Thread(new Runnable() {
                         @Override
                         public void run() {
 
@@ -297,7 +317,7 @@ public class IptablesActivity extends BaseActivity implements Handler.Callback {
                             message.obj = coreHelper.getrealline(mCharSequence2);
                             mHandler.sendMessage(message);
                         }
-                    }).start();
+                    }).start();*/
                 }
                 break;
             case 10001:
@@ -314,13 +334,13 @@ public class IptablesActivity extends BaseActivity implements Handler.Callback {
                 break;
             case 222:
                 // L.e(TAG,String.valueOf((int)msg.obj));
-                paint.setTextSize(et_iptstart.getTextSize());
-                et_iptstart.setPadding((int) paint.measureText(String.valueOf((int) msg.obj)) + 20, 0, 0, 0);
+                //paint.setTextSize(et_iptstart.getTextSize());
+                //et_iptstart.setPadding((int) paint.measureText(String.valueOf((int) msg.obj)) + 20, 0, 0, 0);
                 break;
             case 333:
                 //    L.e(TAG,String.valueOf((int)msg.obj));
-                paint.setTextSize(et_iptstop.getTextSize());
-                et_iptstop.setPadding((int) paint.measureText(String.valueOf((int) msg.obj)) + 20, 0, 0, 0);
+               // paint.setTextSize(et_iptstop.getTextSize());
+               // et_iptstop.setPadding((int) paint.measureText(String.valueOf((int) msg.obj)) + 20, 0, 0, 0);
                 break;
             case 111:
                 final List<Object> datas = (List<Object>) msg.obj;

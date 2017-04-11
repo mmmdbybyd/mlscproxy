@@ -42,6 +42,8 @@ public class PatternActivity extends BaseActivity implements Handler.Callback {
     String backgroundcolor = null;
     Paint paint = new Paint();
     ScrollViewEx mScrollView=null;
+
+    int linecount=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +74,13 @@ public class PatternActivity extends BaseActivity implements Handler.Callback {
         });
         et_pattern = (EditTextEx) findViewById(R.id.et_pattern);
         et_pattern.clearFocus();
+        paint.setTextSize(et_pattern.getTextSize()-4);
+        paint.setDither(true);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setAntiAlias(true);
 
+        paint.setLinearText(true);
+        paint.setSubpixelText(true);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,24 +107,30 @@ public class PatternActivity extends BaseActivity implements Handler.Callback {
     }
 
     private void initListeners() {
-      /* et_pattern.addTextChangedListener(new TextWatcher() {
+        et_pattern.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                if (after == 0) {
+                    linecount -= coreHelper.getrealline(s.subSequence(start, start + count));
+                }
+                //   LogUtils.e(TAG+1,"1: "+s.subSequence(start,start+count));
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                paint.setTextSize(et_pattern.getTextSize());
-                et_pattern.setPadding((int) paint.measureText(String.valueOf(et_pattern.getLineCount())) + 30, 0, 0, 0);
-
+                //输入 count>0 删除before>0
+                if (before == 0) {
+                    linecount += coreHelper.getrealline(s.subSequence(start, start + count));
+                }
+                //    LogUtils.e(TAG+2,"1: "+s.subSequence(start,start+count));
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                et_pattern.setPadding((int) paint.measureText(String.valueOf(linecount)) + 20, 0, 0, 0);
+                L.e(TAG,String.valueOf(linecount)+":"+paint.measureText(String.valueOf(linecount)));
             }
-        });*/
+        });
     }
 
     private void initPreferences() {
@@ -131,41 +145,6 @@ public class PatternActivity extends BaseActivity implements Handler.Callback {
         }).start();
     }
 
-   /* @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.edit, menu);
-        MenuItem menuItem = menu.findItem(R.id.menu_seekbar);
-        SeekBar actionView = (SeekBar) menuItem.getActionView();
-        actionView.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            float textSize = et_pattern.getTextSize();
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-                et_pattern.setTextSize(progress);
-                paint.setTextSize(progress);
-                et_pattern.setPadding((int) paint.measureText(String.valueOf(et_pattern.getLineCount())) + 40, 0, 0, 0);
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // textSize = et_pattern.getTextSize();
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-*/
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -211,26 +190,13 @@ public class PatternActivity extends BaseActivity implements Handler.Callback {
                             mHandler.sendMessage(message);
                         }
                     }).start();
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            Message message = mHandler.obtainMessage(333);
-                            message.obj = coreHelper.getrealline(mCharSequence);
-                            mHandler.sendMessage(message);
-                        }
-                    }).start();
                 }
 
                 break;
             case 222:
                 et_pattern.setText((SpannableString) msg.obj);
                 break;
-            case 333:
-                L.e(TAG,String.valueOf((int)msg.obj));
-                paint.setTextSize(et_pattern.getTextSize());
-                et_pattern.setPadding((int) paint.measureText(String.valueOf((int)msg.obj)) + 20, 0, 0, 0);
-                break;
+
             case 1010:
                 et_pattern.setBackgroundColor(Color.parseColor(backgroundcolor));
                 et_pattern.setTextColor(Color.parseColor(fontcolor));
