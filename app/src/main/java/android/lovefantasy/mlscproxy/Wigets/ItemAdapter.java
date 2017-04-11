@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.lovefantasy.mlscproxy.R;
 import android.lovefantasy.mlscproxy.Tools.DateHelper;
+import android.lovefantasy.mlscproxy.Tools.L;
 import android.lovefantasy.mlscproxy.UI.PatternActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,7 +30,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemViewHolder> {
     List<ItemData> mDatas = null;
     Context mContext = null;
     LayoutInflater inflater = null;
-    SQLiteDatabase mDataBase=null;
+    SQLiteDatabase mDataBase = null;
     int mCore;
     int mSelected = -1;
     private OnRecyclerViewItemClickListener mOnRecyclerViewItemClickListener = null;
@@ -45,28 +46,29 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemViewHolder> {
     }
 
     public interface OnImageButtonClickListener {
-        void OnImageButtonClick(int position,ItemViewHolder holder);
+        void OnImageButtonClick(int position, ItemViewHolder holder);
     }
 
-    public ItemAdapter(Context context, int core, List<ItemData> datas,SQLiteDatabase database) {
+    public ItemAdapter(Context context, int core, List<ItemData> datas, SQLiteDatabase database) {
         this.mContext = context;
         this.mDatas = datas;
         mCore = core;
-        mDataBase=database;
-        inflater =LayoutInflater.from(context);
+        mDataBase = database;
+        inflater = LayoutInflater.from(context);
 
     }
 
-    public void remove(int position){
+    public void remove(int position) {
         if (mSelected > position)
-            mSelected -=1;
+            mSelected -= 1;
         else if (mSelected == position) {
-            mSelected=-1;
-        }else if (mSelected!=-1){
+            mSelected = -1;
+        } else if (mSelected != -1) {
             mDatas.get(mSelected).setSelected(false);
         }
         mDatas.remove(position);
     }
+
     public void insert(int position, String strelement) {
         mDatas.add(position, new ItemData(strelement));
     }
@@ -106,19 +108,19 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemViewHolder> {
             holder.lnlay.setVisibility(View.GONE);
 
         }
-        Cursor cursor = mDataBase.rawQuery("select * from pattern where name=?", new String[]{mDatas.get(position).getData()+".conf"});
-       if (cursor.moveToFirst()) {
-           holder.tv_time.setText(cursor.getString(cursor.getColumnIndex("time")));
-       }else {
-           holder.tv_time.setText("从未使用");
+        Cursor cursor = mDataBase.rawQuery("select * from pattern where name=?", new String[]{mDatas.get(position).getData() + ".conf"});
+        if (cursor.moveToFirst()) {
+            holder.tv_time.setText(cursor.getString(cursor.getColumnIndex("time")));
+        } else {
+            holder.tv_time.setText("从未使用");
 
-       }
+        }
         holder.bt1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, PatternActivity.class);
                 intent.putExtra("core", mCore);
-                intent.putExtra("filename", mDatas.get(position).getData()+".conf");
+                intent.putExtra("filename", mDatas.get(position).getData() + ".conf");
                 mContext.startActivity(intent);
 
             }
@@ -127,7 +129,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemViewHolder> {
         holder.bt2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnImageButtonClickListener.OnImageButtonClick(position,holder);
+                mOnImageButtonClickListener.OnImageButtonClick(position, holder);
             }
         });
 
@@ -135,7 +137,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemViewHolder> {
             @Override
             public void onClick(View v) {
                 if (mOnRecyclerViewItemClickListener != null) {
-                    if (mSelected==position)return;
+                    getDatabaseRxTx(holder,position);
+                    if (mSelected == position) {
+                        return;
+                    }
                     mDatas.get(position).setSelected(true);
                     if (mSelected != -1) {
                         mDatas.get(mSelected).setSelected(false);
@@ -143,30 +148,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemViewHolder> {
                     }
 
                     mOnRecyclerViewItemClickListener.OnRecyclerViewItemClick(mSelected, position);
-                    ObjectAnimator color = ObjectAnimator.ofInt(holder.iv1, "backgroundColor",mContext.getResources().getColor(R.color.grayPrimary),mContext.getResources().getColor(R.color.greenPrimary));
+
+                    ObjectAnimator color = ObjectAnimator.ofInt(holder.iv1, "backgroundColor", mContext.getResources().getColor(R.color.grayPrimary), mContext.getResources().getColor(R.color.greenPrimary));
                     color.setDuration(500);
                     color.setEvaluator(new ArgbEvaluator());
-
                     color.start();
-                   // holder.iv1.setBackgroundColor(mContext.getResources().getColor(R.color.greenPrimary));
+
                     holder.bt2.setVisibility(View.VISIBLE);
                     holder.lnlay.setVisibility(View.VISIBLE);
 
                     mSelected = position;
-                    Cursor cursor = mDataBase.rawQuery("select * from pattern where name=?", new String[]{mDatas.get(position).getData()+".conf"});
-                    if (cursor.moveToFirst()) {
-                        holder.tv_tx.setText(cursor.getString(cursor.getColumnIndex("tx"))+"MB");
-                    }else {
-                        holder.tv_tx.setText("0MB");
 
-                    }
-                    cursor = mDataBase.rawQuery("select * from pattern where name=?", new String[]{mDatas.get(position).getData()+".conf"});
-                    if (cursor.moveToFirst()) {
-                        holder.tv_rx.setText(cursor.getString(cursor.getColumnIndex("rx"))+"MB");
-                    }else {
-                        holder.tv_rx.setText("0MB");
-
-                    }
                 }
 
             }
@@ -177,7 +169,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemViewHolder> {
                 if (mOnRecyclerViewItemLongClickListener != null) {
                     mOnRecyclerViewItemLongClickListener.OnRecyclerViewItemLongClick(position);
 
-            }
+                }
                 return true;
             }
         });
@@ -195,6 +187,23 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemViewHolder> {
         mOnImageButtonClickListener = imageButtonClickListener;
     }
 
+    private void getDatabaseRxTx(ItemViewHolder holder,int position){
+        Cursor cursor = mDataBase.rawQuery("select * from pattern where name=?", new String[]{mDatas.get(position).getData()+".conf"});
+        if (cursor.moveToFirst()) {
+
+            holder.tv_tx.setText(cursor.getString(cursor.getColumnIndex("tx"))+"MB");
+        }else {
+            holder.tv_tx.setText("0MB");
+
+        }
+        cursor = mDataBase.rawQuery("select * from pattern where name=?", new String[]{mDatas.get(position).getData()+".conf"});
+        if (cursor.moveToFirst()) {
+            holder.tv_rx.setText(cursor.getString(cursor.getColumnIndex("rx"))+"MB");
+        }else {
+            holder.tv_rx.setText("0MB");
+        }
+        cursor.close();
+    }
     @Override
     public int getItemCount() {
         return mDatas.size();

@@ -31,9 +31,9 @@ public class ChangelogActivity extends BaseActivity {
         TextView textView= (TextView) findViewById(R.id.tv_supdate);
         textView.setText("更新日志：\n" +
                 "\n" +
-                "Version 1.6.2:\n"+
+                "Version 1.6.8:\n"+
                 "1.优化界面。\n"+
-                "2.增加流量统计功能(实验)。\n"+
+                "2.增加流量统计功能。\n"+
                 "\n"+
                 "Version 1.5.2:\n"+
                 "1.优化编辑器行号显示。\n"+

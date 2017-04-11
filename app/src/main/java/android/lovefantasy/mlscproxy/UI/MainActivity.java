@@ -111,10 +111,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     boolean isShowfab = true;
     boolean trafficstats = false;
     TrafficStatsAidl mService = null;
-    int rate=5;
+    int rate = 5;
     ServiceConnection connection = null;
     SQLiteDatabase writableDatabase = null;
-    //ScrollViewEx mScrollView=null;
 
     /****
      * Init
@@ -318,7 +317,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void initRegister() {
-        recever = new BootReceiver(mHandler);
+        if (recever == null) {
+            recever = new BootReceiver(mHandler);
+
+        }
         if (registerReceiver(recever, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)) != null)
             isregister = true;
     }
@@ -363,7 +365,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
         }, "initfab").start();
     }
-    private void initService(){
+
+    private void initService() {
         connection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
@@ -374,12 +377,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
             @Override
             public void onServiceDisconnected(ComponentName name) {
-                mService=null;
+                mService = null;
                 L.e(TAG, "onServiceConnected");
 
             }
         };
     }
+
     private void initPreferences() {
         new Thread(new Runnable() {
             @Override
@@ -388,7 +392,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 showOutput = s.getBoolean(getString(R.string.pf_showoutput), false);
                 clearNotify = s.getBoolean(getString(R.string.pf_clearnotification), false);
                 trafficstats = s.getBoolean(getString(R.string.pf_datastatistics), false);
-                rate = Integer.parseInt( s.getString(getString(R.string.pf_statsrate),"5"));
+                rate = Integer.parseInt(s.getString(getString(R.string.pf_statsrate), "5"));
                 mHandler.sendEmptyMessage(1212);
             }
         }).start();
@@ -679,16 +683,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
-    private void bindServices(){
+    private void bindServices() {
         Intent intent = new Intent(MainActivity.this, TrafficStatsService.class);
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
     }
-    private void unbindServices(){
-        if (trafficstats&&mService!=null) {
+
+    private void unbindServices() {
+        if (trafficstats && mService != null) {
             unbindService(connection);
-            mService=null;
+            mService = null;
         }
     }
+
     private void showOutput() {
         if (!showOutput) return;
         if (out != null && err != null && (!out.equals("") | !err.equals(""))) {
@@ -745,8 +751,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     rx = cursor.getDouble(cursor.getColumnIndex("rx"));
                     ltx = cursor.getDouble(cursor.getColumnIndex("ltx"));
                     lrx = cursor.getDouble(cursor.getColumnIndex("lrx"));
-                    tmptx = TrafficStats.getTotalTxBytes() / (DIV);
-                    tmprx = TrafficStats.getTotalRxBytes() / (DIV);
+                    cursor.close();
+                    tmptx = TrafficStats.getMobileTxBytes() / (DIV);
+                    tmprx = TrafficStats.getMobileRxBytes() / (DIV);
 
                     tx += tmptx - ltx;
                     rx += tmprx - lrx;
@@ -772,14 +779,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 }
                 Cursor cursor = writableDatabase.rawQuery("select * from pattern where name=?", new String[]{current});
                 if (cursor.moveToFirst()) {
-                    tmptx = TrafficStats.getTotalTxBytes() / (DIV);
-                    tmprx = TrafficStats.getTotalRxBytes() / (DIV);
+                    tmptx = TrafficStats.getMobileTxBytes() / (DIV);
+                    tmprx = TrafficStats.getMobileRxBytes() / (DIV);
                     writableDatabase.execSQL("update pattern set ltx=? where name=?", new String[]{String.valueOf(tmptx), current});
                     writableDatabase.execSQL("update pattern set lrx=? where name=?", new String[]{String.valueOf(tmprx), current});
                 }
             }
         }).start();
-
 
 
     }
@@ -929,7 +935,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void task(boolean b) {
-        if (trafficstats&&mService!=null) {
+        if (trafficstats && mService != null) {
             try {
                 if (b) {
                     mService.setupTask(rate);
@@ -974,7 +980,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 setFab(true);
                 if (msg.arg1 == 0) {
                     coreHelper.notifystatus(1, true, (String) msg.obj);
-                   // updateDatabaseTxRx();
+                    // updateDatabaseTxRx();
                 } else if (msg.arg1 == 1) {
                     if (((List<String>) msg.obj).size() == 3) {
                         coreHelper.notifystatus(1, true, ((List<String>) msg.obj).get(2));

@@ -1,6 +1,11 @@
 package android.lovefantasy.mlscproxy.Services;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -10,6 +15,7 @@ import android.lovefantasy.mlscproxy.Base.App;
 import android.lovefantasy.mlscproxy.R;
 import android.lovefantasy.mlscproxy.Tools.DatabaseHelper;
 import android.lovefantasy.mlscproxy.Tools.L;
+import android.lovefantasy.mlscproxy.UI.MainActivity;
 import android.net.TrafficStats;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -79,9 +85,12 @@ public class TrafficStatsService extends Service {
             rx = cursor.getDouble(cursor.getColumnIndex("rx"));
             ltx = cursor.getDouble(cursor.getColumnIndex("ltx"));
             lrx = cursor.getDouble(cursor.getColumnIndex("lrx"));
-            tmptx = TrafficStats.getTotalTxBytes() / (DIV);
-            tmprx = TrafficStats.getTotalRxBytes() / (DIV);
-
+            cursor.close();
+            tmptx = TrafficStats.getMobileTxBytes() / (DIV);
+            tmprx = TrafficStats.getMobileRxBytes() / (DIV);
+           /* L.e("调试","tx: "+String.valueOf(tx)+
+                                        " rx: "+String.valueOf(rx)+" ltx: "+String.valueOf(tmptx)+
+                    " lrx: "+String.valueOf(tmprx));*/
             tx += tmptx - ltx;
             rx += tmprx - lrx;
             mDatabase.execSQL("update pattern set tx=? where name=?", new String[]{String.valueOf(tx), current});
@@ -91,6 +100,24 @@ public class TrafficStatsService extends Service {
         }
 
     }
+    public void notification(String title, String content) {
+        Notification.Builder builder = null;
+        Notification nf = null;
+        builder = new Notification.Builder(App.getContext());
+        Intent resuIntent = new Intent(Intent.ACTION_MAIN);
+        resuIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        resuIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
+        resuIntent.setComponent(new ComponentName(App.getContext(), MainActivity.class));
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setContentIntent(PendingIntent.getActivity(App.getContext(), 0, resuIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        builder.setContentTitle(title);
+        builder.setContentText(content);
+        nf = builder.build();
+        nf.flags = Notification.FLAG_NO_CLEAR;
+        ((NotificationManager) App.getContext().getSystemService(Context.NOTIFICATION_SERVICE)).notify(2, nf);
+
+    }
+
     private class StatsTask extends TimerTask{
 
         @Override
