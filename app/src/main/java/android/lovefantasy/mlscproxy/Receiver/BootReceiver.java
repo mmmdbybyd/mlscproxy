@@ -38,6 +38,9 @@ public class BootReceiver extends BroadcastReceiver {
                         @Override
                         public void run() {
                             String currentcproxy = mCoreHelper.readFile(new File(mCoreHelper.filedir+ "cproxy/current")); //sharedPreferences.getString(context.getString(R.string.pf_currentrunningcproxy), "cproxy.conf");
+                            if (!currentcproxy.endsWith(".conf")) {
+                                return;
+                            }
                             mCoreHelper.execmds(false, false,
                                     "sh " + mCoreHelper.stopipt,
                                     "sh " + mCoreHelper.startipt,
