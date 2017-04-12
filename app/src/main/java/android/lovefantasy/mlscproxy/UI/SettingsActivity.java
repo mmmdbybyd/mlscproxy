@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.support.design.widget.AppBarLayout;
@@ -27,6 +28,7 @@ public class SettingsActivity extends PreferenceActivity implements
     static private String TAG = SettingsActivity.class.getSimpleName();
     CheckBoxPreference sp_notification;
     CheckBoxPreference sp_datastatistics;
+    EditTextPreference sp_rate;
     TrafficStatsAidl mService = null;
     boolean b=true;
     ServiceConnection connection =null;
@@ -57,8 +59,8 @@ public class SettingsActivity extends PreferenceActivity implements
     private void task(){
         try {
             if (b) {
-               // mService.setupTask(3);
-
+                mService.setupTask(Integer.parseInt(sp_rate.getText()));
+               // L.e(TAG,sp_rate.getText());
             }else{
                 mService.cancelTask();
             }
@@ -104,6 +106,8 @@ public class SettingsActivity extends PreferenceActivity implements
         sp_notification.setOnPreferenceChangeListener(this);
         sp_datastatistics = (CheckBoxPreference) findPreference(getString(R.string.pf_datastatistics));
         sp_datastatistics.setOnPreferenceChangeListener(this);
+        sp_rate = (EditTextPreference) findPreference(getString(R.string.pf_statsrate));
+
 
     }
 

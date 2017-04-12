@@ -792,7 +792,7 @@ public class Core {
 
                         // Toast.makeText(mContext, currentCore + "已经关闭或未启动!", Toast.LENGTH_SHORT).show();
                     } else {
-                        notification(currentCore, "PID: " + pid + " 模式: " + sharedPreferences.getString(mContext.getString(R.string.pf_currentrunningcproxy), "出错"));
+                        notification(currentCore, "PID: " + pid + " 模式: " + sharedPreferences.getString(mContext.getString(R.string.pf_currentrunningcproxy), "未写入配置文件"));
                         // mHandler.sendEmptyMessage(MSG.RUNNING);
                     }
                 } else {

@@ -13,7 +13,7 @@ public class L {
     public static final int WARN=4;
     public static final int ERROR=5;
     public static final int NOTHING=6;
-    public static final int level=6;
+    public static final int level=1;
     public L(){
 
     }

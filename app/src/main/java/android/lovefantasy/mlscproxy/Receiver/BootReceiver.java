@@ -12,21 +12,23 @@ import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.os.Message;
 
+import java.io.File;
+
 public class BootReceiver extends BroadcastReceiver {
     Handler mHandler = null;
     Core mCoreHelper = null;
     SharedPreferences sharedPreferences=null;
     public BootReceiver() {
-        mCoreHelper = App.getCoreHelper();
+
     }
 
     public BootReceiver(Handler handler) {
-        mCoreHelper = App.getCoreHelper();
         mHandler = handler;
     }
 
     @Override
     public void onReceive(final Context context, Intent intent) {
+        mCoreHelper = App.getCoreHelper();
         switch (intent.getAction()) {
             case Intent.ACTION_BOOT_COMPLETED:
                 mCoreHelper = App.getCoreHelper(); //new CoreHelper(context);
@@ -35,7 +37,7 @@ public class BootReceiver extends BroadcastReceiver {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            String currentcproxy = sharedPreferences.getString(context.getString(R.string.pf_currentrunningcproxy), "cproxy.conf");
+                            String currentcproxy = mCoreHelper.readFile(new File(mCoreHelper.filedir+ "cproxy/current")); //sharedPreferences.getString(context.getString(R.string.pf_currentrunningcproxy), "cproxy.conf");
                             mCoreHelper.execmds(false, false,
                                     "sh " + mCoreHelper.stopipt,
                                     "sh " + mCoreHelper.startipt,

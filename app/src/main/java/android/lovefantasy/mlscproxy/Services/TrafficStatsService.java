@@ -28,7 +28,7 @@ public class TrafficStatsService extends Service {
     SQLiteDatabase mDatabase=null;
     Timer mTimer=null;
     SharedPreferences s=null;
-    private final int DIV=1024*1024;
+    private final long DIV=1024*1024;
     private static String TAG=TrafficStatsService.class.getSimpleName();
     public TrafficStatsService() {
     }
@@ -88,9 +88,9 @@ public class TrafficStatsService extends Service {
             cursor.close();
             tmptx = TrafficStats.getMobileTxBytes() / (DIV);
             tmprx = TrafficStats.getMobileRxBytes() / (DIV);
-           /* L.e("调试","tx: "+String.valueOf(tx)+
+            L.e("调试","tx: "+String.valueOf(tx)+
                                         " rx: "+String.valueOf(rx)+" ltx: "+String.valueOf(tmptx)+
-                    " lrx: "+String.valueOf(tmprx));*/
+                    " lrx: "+String.valueOf(tmprx));
             tx += tmptx - ltx;
             rx += tmprx - lrx;
             mDatabase.execSQL("update pattern set tx=? where name=?", new String[]{String.valueOf(tx), current});
