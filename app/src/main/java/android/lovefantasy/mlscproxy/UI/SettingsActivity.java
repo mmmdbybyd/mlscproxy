@@ -59,7 +59,7 @@ public class SettingsActivity extends PreferenceActivity implements
     private void task(){
         try {
             if (b) {
-                mService.setupTask(Integer.parseInt(sp_rate.getText()));
+             //   mService.setupTask(Integer.parseInt(sp_rate.getText()));
                // L.e(TAG,sp_rate.getText());
             }else{
                 mService.cancelTask();

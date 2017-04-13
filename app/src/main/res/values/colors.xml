@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--resources>
+<resources>
     <color name="colorPrimary">#F06292</color>
     <color name="colorPrimaryDark">#C2185B</color>
     <color name="colorAccent">#78909c</color>
@@ -29,10 +29,10 @@
     <color name="Blue">#268bd2</color>
     <color name="Cyan">#2aa198</color>
     <color name="Green">#859900</color>
-</resources-->
+</resources>
 
 
-    <resources>
+    <!--resources>
         <color name="colorPrimary">#607D8B</color>
         <color name="colorPrimaryDark">#455A64</color>
         <color name="colorPrimaryLight">#CFD8DC</color>
@@ -64,4 +64,4 @@
         <color name="Blue">#268bd2</color>
         <color name="Cyan">#2aa198</color>
         <color name="Green">#859900</color>
-    </resources>
+    </resources-->

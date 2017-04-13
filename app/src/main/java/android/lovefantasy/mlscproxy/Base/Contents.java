@@ -7,7 +7,7 @@ package android.lovefantasy.mlscproxy.Base;
 public class Contents {
     static public String ipts[] = {"#!/system/bin/sh\n" +
             "#VPN选项，尽量开启VPN后重启防跳，部分机型不支持\n" +
-            "card='ccmni0' #数据网卡，该项留空则不处理\n" +
+            "card='rmnet0' #数据网卡，该项留空则不处理(MTK:ccmni0 高通:rmnet0)\n" +
             "proxy_mode='off'  #如果为share则代理共享数据，否则只代理本机\n" +
             "\n" +
             "#放行udp（不包括DNS）\n" +
@@ -25,7 +25,6 @@ public class Contents {
             "################参数初始化##################\n" +
             "cd \"/data/data/android.lovefantasy.CProxy/files/cproxy\"\n" +
             "mode_content=\"`cat $(cat current)`\"\n" +
-            "./stopipt.sh DROP\n" +
             "tcp_listen=`echo \"$mode_content\" | grep tcp_listen | grep -o [0-9][0-9]\\*`\n" +
             "dns_listen=`echo \"$mode_content\" | grep dns_listen | grep -o [0-9][0-9]\\*`\n" +
             "uid=`echo \"$mode_content\" | grep uid | grep -o [0-9][0-9]\\*`\n" +

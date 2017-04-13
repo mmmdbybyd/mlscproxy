@@ -27,8 +27,8 @@ public class TrafficStatsService extends Service {
    DatabaseHelper mDatabaseHelper=null;
     SQLiteDatabase mDatabase=null;
     Timer mTimer=null;
-    SharedPreferences s=null;
     private final long DIV=1024*1024;
+    String current="null";
     private static String TAG=TrafficStatsService.class.getSimpleName();
     public TrafficStatsService() {
     }
@@ -37,15 +37,15 @@ public class TrafficStatsService extends Service {
 
 
         @Override
-        public void setupTask(int interval) throws RemoteException {
+        public void setupTask(int interval,String filename) throws RemoteException {
             L.e(TAG,"setupTask");
+            current=filename;
             if (mTimer!=null)mTimer.cancel();
             mDatabaseHelper= new DatabaseHelper(App.getContext(), getString(R.string.database), null, 3);
             mDatabase = mDatabaseHelper.getWritableDatabase();
-            s = getSharedPreferences(getString(R.string.sharedpref), MODE_PRIVATE);
             if (mDatabaseHelper != null && mDatabase != null) {
                 mTimer=new Timer("TrafficStats");
-                mTimer.schedule(new StatsTask(),0,interval*1000);
+                mTimer.schedule(new StatsTask(current),0,interval*1000);
             }
 
         }
@@ -71,14 +71,8 @@ public class TrafficStatsService extends Service {
         return super.onUnbind(intent);
     }
 
-    private void updateDatabaseTxRx() {
+    private void updateDatabaseTxRx(String filename) {
         double tx = 0, rx = 0, ltx = 0, lrx = 0, tmptx = 0, tmprx = 0;
-        String current = s.getString(getString(R.string.pf_currentrunningcproxy), "null");
-        if (current.equals("null")){
-            L.e(TAG,"null");
-            return;
-        }
-
         Cursor cursor = mDatabase.rawQuery("select * from pattern where name=?", new String[]{current});
         if (cursor.moveToFirst()) {
             tx = cursor.getDouble(cursor.getColumnIndex("tx"));
@@ -88,15 +82,17 @@ public class TrafficStatsService extends Service {
             cursor.close();
             tmptx = TrafficStats.getMobileTxBytes() / (DIV);
             tmprx = TrafficStats.getMobileRxBytes() / (DIV);
-            L.e("调试","tx: "+String.valueOf(tx)+
+            //L.e("11",filename);
+
+           /* L.e("调试","tx: "+String.valueOf(tx)+
                                         " rx: "+String.valueOf(rx)+" ltx: "+String.valueOf(tmptx)+
-                    " lrx: "+String.valueOf(tmprx));
+                    " lrx: "+String.valueOf(tmprx));*/
             tx += tmptx - ltx;
             rx += tmprx - lrx;
-            mDatabase.execSQL("update pattern set tx=? where name=?", new String[]{String.valueOf(tx), current});
-            mDatabase.execSQL("update pattern set rx=? where name=?", new String[]{String.valueOf(rx), current});
-            mDatabase.execSQL("update pattern set ltx=? where name=?", new String[]{String.valueOf(tmptx), current});
-            mDatabase.execSQL("update pattern set lrx=? where name=?", new String[]{String.valueOf(tmprx), current});
+            mDatabase.execSQL("update pattern set tx=? where name=?", new String[]{String.valueOf(tx), filename});
+            mDatabase.execSQL("update pattern set rx=? where name=?", new String[]{String.valueOf(rx), filename});
+            mDatabase.execSQL("update pattern set ltx=? where name=?", new String[]{String.valueOf(tmptx), filename});
+            mDatabase.execSQL("update pattern set lrx=? where name=?", new String[]{String.valueOf(tmprx), filename});
         }
 
     }
@@ -119,10 +115,27 @@ public class TrafficStatsService extends Service {
     }
 
     private class StatsTask extends TimerTask{
+        String mFilename;
+        boolean b;
+        protected StatsTask(String filename) {
+            super();
+            mFilename=filename;
+           // L.e("11",filename);
+
+            if (mFilename.endsWith(".conf")) {
+                b=true;
+            }else {
+                b=false;
+            }
+
+        }
 
         @Override
         public void run() {
-            updateDatabaseTxRx();
+            if (b) {
+                updateDatabaseTxRx(mFilename);
+            }
+
            // L.e(TAG,"test");
         }
     }

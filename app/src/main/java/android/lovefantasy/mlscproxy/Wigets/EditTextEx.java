@@ -112,7 +112,7 @@ public class EditTextEx extends EditText {
                 }
             }
             padding = (int) mPaint.measureText(String.valueOf(realLineCount));
-            L.e(TAG,String.valueOf(realLineCount) +":"+String.valueOf(mPaint.measureText(String.valueOf(realLineCount))));
+          //  L.e(TAG,String.valueOf(realLineCount) +":"+String.valueOf(mPaint.measureText(String.valueOf(realLineCount))));
             real = realLineCount;
             canvas.drawLine(padding + 15, 0, padding + 15, lineHeight, mPaint);
         }

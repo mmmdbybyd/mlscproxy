@@ -115,6 +115,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     ServiceConnection connection = null;
     SQLiteDatabase writableDatabase = null;
 
+    String current;
     /****
      * Init
      */
@@ -244,16 +245,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         if (coreHelper.isCoreRunning(1) != null)
                             coreHelper.killml(mHandler, 1);
                         else {
-                            if (mPosition != -1)
-                                coreHelper.execml(mHandler, 1, adapter.getData(mPosition) + ".conf");
-                            else {
+                            if (mPosition != -1) {
+                                current = adapter.getData(mPosition) + ".conf";
+
+                                coreHelper.execml(mHandler, 1, current);
+                            } else {
                                 mHandler.sendEmptyMessage(MSG.NOPATTERN);
                             }
                         }
                     }
                 });
                 thread.start();
-                //windowManager.addView(floatWindowView,layoutParams);
             }
         });
         fab.setOnLongClickListener(new View.OnLongClickListener() {
@@ -653,10 +655,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         } else if (id == R.id.menu_iptedit) {
             Intent intent = new Intent(App.getContext(), IptablesActivity.class);
-            //Bundle bundle=new Bundle();
-            //bundle.putSerializable("corehelper",coreHelper);
-            //bundle.putInt("core",1);
-            //intent.putExtras(bundle);
             intent.putExtra("core", 1);
             startActivity(intent);
             overridePendingTransition(R.anim.anim_loadactivity, R.anim.anim_exitactivity);
@@ -934,11 +932,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         writableDatabase.execSQL("insert into pattern (name,time,tx,rx,ltx,lrx) values(?,?,?,?,?,?)", new String[]{item, DateHelper.getCurrentDateAndTime(), "0", "0", "0", "0"});
     }
 
-    private void task(boolean b) {
+    private void task(boolean b,String filename) {
         if (trafficstats && mService != null) {
             try {
                 if (b) {
-                    mService.setupTask(rate);
+
+                    mService.setupTask(rate,filename);
 
                 } else {
                     mService.cancelTask();
@@ -988,7 +987,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         filterError(((List<String>) msg.obj).get(1));
                     }
                     showOutput();
-                    task(true);
+                    task(true,current);
 
                 }
                 break;
@@ -1003,7 +1002,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         filterError(((List<String>) msg.obj).get(1));
                     }
                     showOutput();
-                    task(false);
+                    task(false,current);
 
                 }
                 break;

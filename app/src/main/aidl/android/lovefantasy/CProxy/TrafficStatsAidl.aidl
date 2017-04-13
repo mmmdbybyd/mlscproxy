@@ -8,8 +8,8 @@ interface TrafficStatsAidl {
      * Demonstrates some basic types that you can use as parameters
      * and return values in AIDL.
      */
-    void setupTask( int interval);
+    void setupTask( int interval,String filename);
     void cancelTask();
-
+    //void configure(String filename);
 //
 }
