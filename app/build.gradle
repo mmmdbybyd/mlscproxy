@@ -8,7 +8,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 24
-        versionName "2.0.0"
+        versionName "1.7.3(萌萌逼)"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         resConfigs "en", "de", "fr", "it"
